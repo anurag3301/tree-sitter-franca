@@ -1,0 +1,170 @@
+================================================================================
+Constants of basic types
+================================================================================
+
+package demo
+
+typeCollection T {
+  const Int32 answer = 42
+  const UInt8 mask = 0xFF
+  const UInt8 bits = 0b1010
+  const Boolean flag = true
+  const String name = "franca"
+  const Float ratio = 1.5f
+  const Double big = 2.0e-3d
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (package_declaration
+    name: (qualified_name
+      (identifier)))
+  (type_collection
+    name: (identifier)
+    (constant_declaration
+      type: (basic_type)
+      name: (identifier)
+      value: (integer))
+    (constant_declaration
+      type: (basic_type)
+      name: (identifier)
+      value: (integer))
+    (constant_declaration
+      type: (basic_type)
+      name: (identifier)
+      value: (integer))
+    (constant_declaration
+      type: (basic_type)
+      name: (identifier)
+      value: (boolean))
+    (constant_declaration
+      type: (basic_type)
+      name: (identifier)
+      value: (string))
+    (constant_declaration
+      type: (basic_type)
+      name: (identifier)
+      value: (float_literal))
+    (constant_declaration
+      type: (basic_type)
+      name: (identifier)
+      value: (double_literal))))
+
+================================================================================
+Expression precedence
+================================================================================
+
+package demo
+
+typeCollection T {
+  const Int32 x = 1 + 2 * 3
+  const Boolean y = !a && (b || c) == true
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (package_declaration
+    name: (qualified_name
+      (identifier)))
+  (type_collection
+    name: (identifier)
+    (constant_declaration
+      type: (basic_type)
+      name: (identifier)
+      value: (binary_expression
+        left: (integer)
+        right: (binary_expression
+          left: (integer)
+          right: (integer))))
+    (constant_declaration
+      type: (basic_type)
+      name: (identifier)
+      value: (binary_expression
+        left: (unary_expression
+          operand: (element_reference
+            (qualified_name
+              (identifier))))
+        right: (binary_expression
+          left: (parenthesized_expression
+            (binary_expression
+              left: (element_reference
+                (qualified_name
+                  (identifier)))
+              right: (element_reference
+                (qualified_name
+                  (identifier)))))
+          right: (boolean))))))
+
+================================================================================
+Array, struct and map initializers
+================================================================================
+
+package demo
+
+typeCollection T {
+  const Point origin = { x: 0, y: 0 }
+  const Numbers[] list = [1, 2, 3]
+  const Lookup table = ["a" => 1, "b" => 2]
+  const Integer(0, maxInt) n = 5
+  const Integer(-5, 5) m = -1
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (package_declaration
+    name: (qualified_name
+      (identifier)))
+  (type_collection
+    name: (identifier)
+    (constant_declaration
+      type: (type_reference
+        (identifier))
+      name: (identifier)
+      value: (compound_initializer
+        (field_initializer
+          name: (identifier)
+          value: (integer))
+        (field_initializer
+          name: (identifier)
+          value: (integer))))
+    (constant_declaration
+      type: (type_reference
+        (identifier))
+      (array_suffix)
+      name: (identifier)
+      value: (bracket_initializer
+        (element_initializer
+          first: (integer))
+        (element_initializer
+          first: (integer))
+        (element_initializer
+          first: (integer))))
+    (constant_declaration
+      type: (type_reference
+        (identifier))
+      name: (identifier)
+      value: (bracket_initializer
+        (element_initializer
+          first: (string)
+          second: (integer))
+        (element_initializer
+          first: (string)
+          second: (integer))))
+    (constant_declaration
+      type: (integer_interval
+        lower: (interval_bound
+          (integer)))
+      name: (identifier)
+      value: (integer))
+    (constant_declaration
+      type: (integer_interval
+        lower: (interval_bound
+          (integer))
+        upper: (interval_bound
+          (integer)))
+      name: (identifier)
+      value: (unary_expression
+        operand: (integer)))))
