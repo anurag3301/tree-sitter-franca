@@ -1,0 +1,28 @@
+{
+  "name": "tree-sitter-franca",
+  "version": "0.1.0",
+  "description": "Franca IDL (.fidl) grammar for tree-sitter",
+  "repository": "github:anurag3301/tree-sitter-franca",
+  "license": "MIT",
+  "author": "Anurag Kumar Singh",
+  "keywords": [
+    "incremental",
+    "parsing",
+    "tree-sitter",
+    "franca",
+    "fidl"
+  ],
+  "files": [
+    "grammar.js",
+    "tree-sitter.json",
+    "queries/*",
+    "src/**"
+  ],
+  "scripts": {
+    "generate": "tree-sitter generate",
+    "test": "tree-sitter test"
+  },
+  "devDependencies": {
+    "tree-sitter-cli": "^0.25.0"
+  }
+}
