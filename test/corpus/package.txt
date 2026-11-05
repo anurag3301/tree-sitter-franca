@@ -1,0 +1,42 @@
+================================================================================
+Package declaration
+================================================================================
+
+package org.example.demo
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (package_declaration
+    name: (qualified_name
+      (identifier)
+      (identifier)
+      (identifier))))
+
+================================================================================
+Imports and comments
+================================================================================
+
+// leading comment
+package demo
+/* block
+   comment */
+import org.example.* from "other.fidl"
+import model "types.fidl"
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (comment)
+  (package_declaration
+    name: (qualified_name
+      (identifier)))
+  (comment)
+  (import_declaration
+    namespace: (imported_name
+      (qualified_name
+        (identifier)
+        (identifier)))
+    uri: (string))
+  (import_declaration
+    uri: (string)))
