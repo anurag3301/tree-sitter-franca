@@ -75,9 +75,146 @@ module.exports = grammar({
       '}',
     ),
 
-    // Placeholders, filled in by the following grammar milestones.
-    constant_declaration: $ => seq(optional($.annotation_block), 'const', $.identifier),
+    constant_declaration: $ => seq(
+      optional($.annotation_block),
+      'const',
+      field('type', $._type_ref),
+      optional($.array_suffix),
+      field('name', $.identifier),
+      '=',
+      field('value', $._initializer),
+    ),
+
+    // Placeholder, filled in by the next grammar milestone.
     _type_definition: $ => seq(optional($.annotation_block), 'typedef', $.identifier),
+
+    array_suffix: _ => seq('[', ']'),
+
+    _type_ref: $ => choice(
+      $.basic_type,
+      $.integer_interval,
+      alias($.qualified_name, $.type_reference),
+    ),
+
+    basic_type: _ => choice(
+      'undefined',
+      'Int8', 'UInt8', 'Int16', 'UInt16', 'Int32', 'UInt32', 'Int64', 'UInt64',
+      'Boolean', 'String', 'Float', 'Double', 'ByteBuffer',
+    ),
+
+    integer_interval: $ => seq(
+      'Integer',
+      optional(seq(
+        '(',
+        field('lower', choice($.interval_bound, 'minInt')),
+        ',',
+        field('upper', choice($.interval_bound, 'maxInt')),
+        ')',
+      )),
+    ),
+
+    interval_bound: $ => seq(optional('-'), $.integer),
+
+    _initializer: $ => choice(
+      $._expression,
+      $.compound_initializer,
+      $.bracket_initializer,
+    ),
+
+    compound_initializer: $ => seq(
+      '{',
+      optional(seq(
+        $.field_initializer,
+        repeat(seq(',', $.field_initializer)),
+      )),
+      '}',
+    ),
+
+    field_initializer: $ => seq(
+      field('name', $.identifier),
+      ':',
+      field('value', $._initializer),
+    ),
+
+    bracket_initializer: $ => seq(
+      '[',
+      optional(seq(
+        $.element_initializer,
+        repeat(seq(',', $.element_initializer)),
+      )),
+      ']',
+    ),
+
+    element_initializer: $ => seq(
+      field('first', $._initializer),
+      optional(seq('=>', field('second', $._initializer))),
+    ),
+
+    _expression: $ => choice(
+      $.binary_expression,
+      $._primary_expression,
+    ),
+
+    binary_expression: $ => {
+      const table = [
+        [1, '||'],
+        [2, '&&'],
+        [3, choice('==', '!=')],
+        [4, choice('<', '<=', '>=', '>')],
+        [5, choice('+', '-')],
+        [6, choice('*', '/')],
+      ];
+      return choice(...table.map(([p, op]) => prec.left(p, seq(
+        field('left', $._expression),
+        field('operator', op),
+        field('right', $._expression),
+      ))));
+    },
+
+    _primary_expression: $ => choice(
+      $.unary_expression,
+      $._simple_expression,
+    ),
+
+    unary_expression: $ => prec(7, seq(
+      field('operator', choice('!', '-')),
+      field('operand', $._simple_expression),
+    )),
+
+    _simple_expression: $ => choice(
+      $.element_reference,
+      $.current_error,
+      $.error_enumerator_reference,
+      $._constant,
+      $.parenthesized_expression,
+    ),
+
+    element_reference: $ => seq(
+      $.qualified_name,
+      repeat(seq('->', field('field', $.identifier))),
+    ),
+
+    current_error: _ => 'errorval',
+
+    error_enumerator_reference: $ => seq(
+      'errordef', '.', field('enumerator', $.identifier),
+    ),
+
+    parenthesized_expression: $ => seq('(', $._expression, ')'),
+
+    _constant: $ => choice(
+      $.double_literal,
+      $.float_literal,
+      $.integer,
+      $.boolean,
+      $.string,
+    ),
+
+    double_literal: _ => /[0-9]+\.[0-9]+(e-?[0-9]+)?d/,
+
+    float_literal: _ => /[0-9]+\.[0-9]+(e-?[0-9]+)?f/,
+
+    boolean: _ => choice('true', 'false'),
 
     annotation_block: $ => seq('<**', repeat1($.annotation), '**>'),
 
