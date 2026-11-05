@@ -85,8 +85,100 @@ module.exports = grammar({
       field('value', $._initializer),
     ),
 
-    // Placeholder, filled in by the next grammar milestone.
-    _type_definition: $ => seq(optional($.annotation_block), 'typedef', $.identifier),
+    _type_definition: $ => choice(
+      $.array_declaration,
+      $.typedef_declaration,
+      $.struct_declaration,
+      $.union_declaration,
+      $.enumeration_declaration,
+      $.map_declaration,
+    ),
+
+    array_declaration: $ => seq(
+      optional($.annotation_block),
+      optional('public'),
+      'array',
+      field('name', $.identifier),
+      'of',
+      field('element_type', $._type_ref),
+    ),
+
+    typedef_declaration: $ => seq(
+      optional($.annotation_block),
+      optional('public'),
+      'typedef',
+      field('name', $.identifier),
+      'is',
+      field('type', $._type_ref),
+    ),
+
+    struct_declaration: $ => seq(
+      optional($.annotation_block),
+      optional('public'),
+      'struct',
+      field('name', $.identifier),
+      optional(choice(
+        seq('extends', field('base', $.qualified_name)),
+        'polymorphic',
+      )),
+      '{',
+      repeat($.field),
+      '}',
+    ),
+
+    union_declaration: $ => seq(
+      optional($.annotation_block),
+      optional('public'),
+      'union',
+      field('name', $.identifier),
+      optional(seq('extends', field('base', $.qualified_name))),
+      '{',
+      repeat($.field),
+      '}',
+    ),
+
+    field: $ => seq(
+      optional($.annotation_block),
+      field('type', $._type_ref),
+      optional($.array_suffix),
+      field('name', $.identifier),
+    ),
+
+    enumeration_declaration: $ => seq(
+      optional($.annotation_block),
+      optional('public'),
+      'enumeration',
+      field('name', $.identifier),
+      optional(seq('extends', field('base', $.qualified_name))),
+      $.enumerator_list,
+    ),
+
+    enumerator_list: $ => seq(
+      '{',
+      optional(seq(
+        $.enumerator,
+        repeat(seq(optional(','), $.enumerator)),
+      )),
+      '}',
+    ),
+
+    enumerator: $ => seq(
+      optional($.annotation_block),
+      field('name', $.identifier),
+      optional(seq('=', field('value', $._expression))),
+    ),
+
+    map_declaration: $ => seq(
+      optional($.annotation_block),
+      optional('public'),
+      'map',
+      field('name', $.identifier),
+      '{',
+      field('key_type', $._type_ref),
+      'to',
+      field('value_type', $._type_ref),
+      '}',
+    ),
 
     array_suffix: _ => seq('[', ']'),
 
