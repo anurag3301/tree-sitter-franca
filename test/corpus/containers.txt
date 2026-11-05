@@ -1,0 +1,82 @@
+================================================================================
+Empty type collection
+================================================================================
+
+package demo
+
+typeCollection Types {
+  version { major 1 minor 2 }
+}
+
+typeCollection {
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (package_declaration
+    name: (qualified_name
+      (identifier)))
+  (type_collection
+    name: (identifier)
+    (version
+      major: (integer)
+      minor: (integer)))
+  (type_collection))
+
+================================================================================
+Interface with base and managed interfaces
+================================================================================
+
+package demo
+
+interface Window extends base.Widget manages Button, ui.Label {
+  version { major 0 minor 1 }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (package_declaration
+    name: (qualified_name
+      (identifier)))
+  (interface_declaration
+    name: (identifier)
+    base: (qualified_name
+      (identifier)
+      (identifier))
+    managed: (qualified_name
+      (identifier))
+    managed: (qualified_name
+      (identifier)
+      (identifier))
+    (version
+      major: (integer)
+      minor: (integer))))
+
+================================================================================
+Annotation blocks
+================================================================================
+
+package demo
+
+<** @description : A small \* demo
+    @author : Jane **>
+interface Demo {
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (package_declaration
+    name: (qualified_name
+      (identifier)))
+  (interface_declaration
+    (annotation_block
+      (annotation
+        tag: (annotation_tag)
+        text: (annotation_text))
+      (annotation
+        tag: (annotation_tag)
+        text: (annotation_text)))
+    name: (identifier)))
