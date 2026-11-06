@@ -1,0 +1,195 @@
+================================================================================
+Contract with state machine
+================================================================================
+
+package demo
+
+interface Door {
+  method open { }
+  method close { }
+  attribute Boolean locked
+  broadcast opened { }
+
+  contract {
+    vars {
+      Int32 count = 0
+      Boolean armed;
+    }
+    PSM {
+      initial Closed
+      state Closed {
+        on call open [!locked] -> Open
+        on set locked -> Closed
+      }
+      state Open {
+        on call close -> Closed {
+          count = count + 1
+        }
+        on respond open:other -> Open
+        on signal opened -> Open
+        on update locked -> Open
+        on error open -> Closed
+      }
+    }
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (package_declaration
+    name: (qualified_name
+      (identifier)))
+  (interface_declaration
+    name: (identifier)
+    (method_declaration
+      name: (identifier))
+    (method_declaration
+      name: (identifier))
+    (attribute_declaration
+      type: (basic_type)
+      name: (identifier))
+    (broadcast_declaration
+      name: (identifier))
+    (contract
+      (contract_variables
+        (variable_declaration
+          type: (basic_type)
+          name: (identifier)
+          value: (integer))
+        (variable_declaration
+          type: (basic_type)
+          name: (identifier)))
+      (state_graph
+        initial: (identifier)
+        (state
+          name: (identifier)
+          (transition
+            trigger: (trigger
+              (selector_reference
+                name: (identifier)))
+            guard: (guard
+              (unary_expression
+                operand: (element_reference
+                  (qualified_name
+                    (identifier)))))
+            target: (identifier))
+          (transition
+            trigger: (trigger
+              attribute: (identifier))
+            target: (identifier)))
+        (state
+          name: (identifier)
+          (transition
+            trigger: (trigger
+              (selector_reference
+                name: (identifier)))
+            target: (identifier)
+            action: (block
+              (assignment
+                left: (element_reference
+                  (qualified_name
+                    (identifier)))
+                right: (binary_expression
+                  left: (element_reference
+                    (qualified_name
+                      (identifier)))
+                  right: (integer)))))
+          (transition
+            trigger: (trigger
+              (selector_reference
+                name: (identifier)
+                selector: (identifier)))
+            target: (identifier))
+          (transition
+            trigger: (trigger
+              (selector_reference
+                name: (identifier)))
+            target: (identifier))
+          (transition
+            trigger: (trigger
+              attribute: (identifier))
+            target: (identifier))
+          (transition
+            trigger: (trigger
+              (selector_reference
+                name: (identifier)))
+            target: (identifier)))))))
+
+================================================================================
+Statements in transition actions
+================================================================================
+
+package demo
+
+interface Dev {
+  contract {
+    PSM {
+      initial A
+      state A {
+        on call go -> A {
+          if (x == 1) {
+            y = 2
+          } else if (x == 2) y = 3 else {
+            y = errordef.FAILED
+          }
+        }
+      }
+    }
+  }
+  const Int32 afterContract = 1
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (package_declaration
+    name: (qualified_name
+      (identifier)))
+  (interface_declaration
+    name: (identifier)
+    (contract
+      (state_graph
+        initial: (identifier)
+        (state
+          name: (identifier)
+          (transition
+            trigger: (trigger
+              (selector_reference
+                name: (identifier)))
+            target: (identifier)
+            action: (block
+              (if_statement
+                condition: (binary_expression
+                  left: (element_reference
+                    (qualified_name
+                      (identifier)))
+                  right: (integer))
+                then: (block
+                  (assignment
+                    left: (element_reference
+                      (qualified_name
+                        (identifier)))
+                    right: (integer)))
+                else: (if_statement
+                  condition: (binary_expression
+                    left: (element_reference
+                      (qualified_name
+                        (identifier)))
+                    right: (integer))
+                  then: (assignment
+                    left: (element_reference
+                      (qualified_name
+                        (identifier)))
+                    right: (integer))
+                  else: (block
+                    (assignment
+                      left: (element_reference
+                        (qualified_name
+                          (identifier)))
+                      right: (error_enumerator_reference
+                        enumerator: (identifier)))))))))))
+    (constant_declaration
+      type: (basic_type)
+      name: (identifier)
+      value: (integer))))
