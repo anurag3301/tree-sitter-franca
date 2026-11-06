@@ -1,0 +1,158 @@
+================================================================================
+Attributes
+================================================================================
+
+package demo
+
+interface Sensor {
+  attribute Int32 count
+  attribute String[] labels readonly
+  attribute Float value noRead noSubscriptions
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (package_declaration
+    name: (qualified_name
+      (identifier)))
+  (interface_declaration
+    name: (identifier)
+    (attribute_declaration
+      type: (basic_type)
+      name: (identifier))
+    (attribute_declaration
+      type: (basic_type)
+      (array_suffix)
+      name: (identifier)
+      (attribute_modifier))
+    (attribute_declaration
+      type: (basic_type)
+      name: (identifier)
+      (attribute_modifier)
+      (attribute_modifier))))
+
+================================================================================
+Methods
+================================================================================
+
+package demo
+
+interface Calc {
+  method add {
+    in {
+      Int32 a
+      Int32 b
+    }
+    out {
+      Int32 sum
+    }
+  }
+  method reset fireAndForget {
+  }
+  method load : loadFile {
+    in { String path }
+    error LoadError
+  }
+  method save {
+    error {
+      NOT_FOUND
+      DENIED
+    }
+  }
+  method open {
+    error extends BaseError {
+      EXTRA
+    }
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (package_declaration
+    name: (qualified_name
+      (identifier)))
+  (interface_declaration
+    name: (identifier)
+    (method_declaration
+      name: (identifier)
+      in: (in_arguments
+        (argument
+          type: (basic_type)
+          name: (identifier))
+        (argument
+          type: (basic_type)
+          name: (identifier)))
+      out: (out_arguments
+        (argument
+          type: (basic_type)
+          name: (identifier))))
+    (method_declaration
+      name: (identifier))
+    (method_declaration
+      name: (identifier)
+      selector: (identifier)
+      in: (in_arguments
+        (argument
+          type: (basic_type)
+          name: (identifier)))
+      (error_clause
+        enumeration: (qualified_name
+          (identifier))))
+    (method_declaration
+      name: (identifier)
+      (error_clause
+        (error_body
+          (enumerator_list
+            (enumerator
+              name: (identifier))
+            (enumerator
+              name: (identifier))))))
+    (method_declaration
+      name: (identifier)
+      (error_clause
+        (error_body
+          base: (qualified_name
+            (identifier))
+          (enumerator_list
+            (enumerator
+              name: (identifier))))))))
+
+================================================================================
+Broadcasts
+================================================================================
+
+package demo
+
+interface Events {
+  broadcast changed {
+    out {
+      String reason
+    }
+  }
+  broadcast tick selective {
+  }
+  broadcast named : byName {
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (package_declaration
+    name: (qualified_name
+      (identifier)))
+  (interface_declaration
+    name: (identifier)
+    (broadcast_declaration
+      name: (identifier)
+      out: (out_arguments
+        (argument
+          type: (basic_type)
+          name: (identifier))))
+    (broadcast_declaration
+      name: (identifier))
+    (broadcast_declaration
+      name: (identifier)
+      selector: (identifier))))
