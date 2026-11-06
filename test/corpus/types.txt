@@ -1,0 +1,142 @@
+================================================================================
+Array, typedef and map
+================================================================================
+
+package demo
+
+typeCollection T {
+  array Names of String
+  public typedef Id is UInt32
+  map Lookup { String to Id }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (package_declaration
+    name: (qualified_name
+      (identifier)))
+  (type_collection
+    name: (identifier)
+    (array_declaration
+      name: (identifier)
+      element_type: (basic_type))
+    (typedef_declaration
+      name: (identifier)
+      type: (basic_type))
+    (map_declaration
+      name: (identifier)
+      key_type: (basic_type)
+      value_type: (type_reference
+        (identifier)))))
+
+================================================================================
+Struct and union
+================================================================================
+
+package demo
+
+typeCollection T {
+  struct Point {
+    Int32 x
+    Int32 y
+  }
+  struct Point3 extends Point {
+    Int32 z
+    Names[] tags
+  }
+  struct Shape polymorphic {
+  }
+  union Value extends Base {
+    String text
+    UInt32 number
+  }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (package_declaration
+    name: (qualified_name
+      (identifier)))
+  (type_collection
+    name: (identifier)
+    (struct_declaration
+      name: (identifier)
+      (field
+        type: (basic_type)
+        name: (identifier))
+      (field
+        type: (basic_type)
+        name: (identifier)))
+    (struct_declaration
+      name: (identifier)
+      base: (qualified_name
+        (identifier))
+      (field
+        type: (basic_type)
+        name: (identifier))
+      (field
+        type: (type_reference
+          (identifier))
+        (array_suffix)
+        name: (identifier)))
+    (struct_declaration
+      name: (identifier))
+    (union_declaration
+      name: (identifier)
+      base: (qualified_name
+        (identifier))
+      (field
+        type: (basic_type)
+        name: (identifier))
+      (field
+        type: (basic_type)
+        name: (identifier)))))
+
+================================================================================
+Enumerations
+================================================================================
+
+package demo
+
+typeCollection T {
+  enumeration Color { RED, GREEN = 2, BLUE }
+  enumeration Mode extends Color {
+    EXTRA = 0x10
+    OTHER
+  }
+  enumeration Empty { }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (package_declaration
+    name: (qualified_name
+      (identifier)))
+  (type_collection
+    name: (identifier)
+    (enumeration_declaration
+      name: (identifier)
+      (enumerator_list
+        (enumerator
+          name: (identifier))
+        (enumerator
+          name: (identifier)
+          value: (integer))
+        (enumerator
+          name: (identifier))))
+    (enumeration_declaration
+      name: (identifier)
+      base: (qualified_name
+        (identifier))
+      (enumerator_list
+        (enumerator
+          name: (identifier)
+          value: (integer))
+        (enumerator
+          name: (identifier))))
+    (enumeration_declaration
+      name: (identifier)
+      (enumerator_list))))
