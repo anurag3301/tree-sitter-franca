@@ -59,8 +59,95 @@ module.exports = grammar({
       '{',
       optional($.version),
       repeat($._interface_member),
+      optional(seq(
+        $.contract,
+        repeat(choice($.constant_declaration, $._type_definition)),
+      )),
       '}',
     ),
+
+    contract: $ => seq(
+      'contract',
+      '{',
+      optional($.contract_variables),
+      'PSM',
+      $.state_graph,
+      '}',
+    ),
+
+    contract_variables: $ => seq(
+      'vars',
+      '{',
+      repeat(seq($.variable_declaration, optional(';'))),
+      '}',
+    ),
+
+    variable_declaration: $ => seq(
+      field('type', $._type_ref),
+      optional($.array_suffix),
+      field('name', $.identifier),
+      optional(seq('=', field('value', $._initializer))),
+    ),
+
+    state_graph: $ => seq(
+      '{',
+      'initial', field('initial', $.identifier),
+      repeat($.state),
+      '}',
+    ),
+
+    state: $ => seq(
+      optional($.annotation_block),
+      'state',
+      field('name', $.identifier),
+      '{',
+      repeat($.transition),
+      '}',
+    ),
+
+    transition: $ => seq(
+      'on',
+      field('trigger', $.trigger),
+      optional(field('guard', $.guard)),
+      '->',
+      field('target', $.identifier),
+      optional(field('action', $.block)),
+    ),
+
+    trigger: $ => choice(
+      seq(choice('call', 'respond', 'error', 'signal'), $.selector_reference),
+      seq(choice('set', 'update'), field('attribute', $.identifier)),
+    ),
+
+    selector_reference: $ => seq(
+      field('name', $.identifier),
+      optional(seq(':', field('selector', $.identifier))),
+    ),
+
+    guard: $ => seq('[', $._expression, ']'),
+
+    _statement: $ => choice(
+      $.assignment,
+      $.if_statement,
+      $.block,
+    ),
+
+    block: $ => seq('{', repeat($._statement), '}'),
+
+    assignment: $ => seq(
+      field('left', $.element_reference),
+      '=',
+      field('right', $._expression),
+    ),
+
+    if_statement: $ => prec.right(seq(
+      'if',
+      '(',
+      field('condition', $._expression),
+      ')',
+      field('then', $._statement),
+      optional(seq('else', field('else', $._statement))),
+    )),
 
     _interface_member: $ => choice(
       $.attribute_declaration,
