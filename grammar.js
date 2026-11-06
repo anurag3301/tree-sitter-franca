@@ -63,8 +63,71 @@ module.exports = grammar({
     ),
 
     _interface_member: $ => choice(
+      $.attribute_declaration,
+      $.method_declaration,
+      $.broadcast_declaration,
       $.constant_declaration,
       $._type_definition,
+    ),
+
+    attribute_declaration: $ => seq(
+      optional($.annotation_block),
+      'attribute',
+      field('type', $._type_ref),
+      optional($.array_suffix),
+      field('name', $.identifier),
+      repeat($.attribute_modifier),
+    ),
+
+    attribute_modifier: _ => choice('readonly', 'noRead', 'noSubscriptions'),
+
+    method_declaration: $ => seq(
+      optional($.annotation_block),
+      'method',
+      field('name', $.identifier),
+      optional(seq(':', field('selector', $.identifier))),
+      optional('fireAndForget'),
+      '{',
+      optional(field('in', $.in_arguments)),
+      optional(field('out', $.out_arguments)),
+      optional($.error_clause),
+      '}',
+    ),
+
+    broadcast_declaration: $ => seq(
+      optional($.annotation_block),
+      'broadcast',
+      field('name', $.identifier),
+      optional(seq(':', field('selector', $.identifier))),
+      optional('selective'),
+      '{',
+      optional(field('out', $.out_arguments)),
+      '}',
+    ),
+
+    in_arguments: $ => seq('in', '{', repeat($.argument), '}'),
+
+    out_arguments: $ => seq('out', '{', repeat($.argument), '}'),
+
+    argument: $ => seq(
+      optional($.annotation_block),
+      field('type', $._type_ref),
+      optional($.array_suffix),
+      field('name', $.identifier),
+    ),
+
+    error_clause: $ => seq(
+      optional($.annotation_block),
+      'error',
+      choice(
+        field('enumeration', $.qualified_name),
+        $.error_body,
+      ),
+    ),
+
+    error_body: $ => seq(
+      optional(seq('extends', field('base', $.qualified_name))),
+      $.enumerator_list,
     ),
 
     version: $ => seq(
