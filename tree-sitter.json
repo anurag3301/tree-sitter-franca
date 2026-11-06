@@ -10,6 +10,7 @@
         "fidl"
       ],
       "highlights": "queries/highlights.scm",
+      "folds": "queries/folds.scm",
       "injection-regex": "^franca$"
     }
   ],
