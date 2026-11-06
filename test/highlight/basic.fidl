@@ -1,0 +1,36 @@
+package org.demo
+// <- keyword
+//      ^ module
+
+interface Sensor extends base.Parent {
+// <- keyword
+//        ^ type
+//                       ^ module
+//                            ^ type
+  version { major 1 minor 0 }
+//^ keyword
+//                ^ number
+  attribute Int32 count readonly
+//^ keyword
+//          ^ type.builtin
+//                ^ property
+//                      ^ keyword.modifier
+  method read : byName {
+//^ keyword
+//       ^ function.method
+    in { String path }
+//       ^ type.builtin
+//              ^ variable.parameter
+    error LoadError
+//  ^ keyword
+//        ^ type
+  }
+  const Boolean flag = true
+//                     ^ boolean
+  const String name = "x"
+//                    ^ string
+  const Float ratio = 1.5f
+//                    ^ number.float
+}
+// a plain comment
+// <- comment
