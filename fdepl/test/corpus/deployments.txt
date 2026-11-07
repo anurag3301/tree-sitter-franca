@@ -1,0 +1,178 @@
+================================================================================
+Package, imports and typeCollection deployment
+================================================================================
+
+package a.b
+import "spec.fdepl"
+import org.x.Spec
+
+define org.x.Spec for typeCollection a.b.Types {
+    enumeration ErrorStatus {
+        EnumBackingType = Int32
+    }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (package_declaration
+    name: (qualified_name
+      (identifier)
+      (identifier)))
+  (import_declaration
+    uri: (string))
+  (import_declaration
+    name: (qualified_name
+      (identifier)
+      (identifier)
+      (identifier)))
+  (type_collection_deployment
+    spec: (qualified_name
+      (identifier)
+      (identifier)
+      (identifier))
+    target: (qualified_name
+      (identifier)
+      (identifier)
+      (identifier))
+    (enumeration_deployment
+      target: (qualified_name
+        (identifier))
+      (property
+        name: (identifier)
+        value: (qualified_name
+          (identifier))))))
+
+================================================================================
+Interface deployment with methods and overwrites
+================================================================================
+
+define s.Spec for interface a.I as Dep {
+    use other.Dep
+    Port = 8080, Name = "x"
+    attribute attr {
+        Flag = true
+        # { Size = -1 }
+    }
+    method foo:sel {
+        Id = 0x1F
+        in { arg { Len = 0b101 } }
+        out { res { Ref = &a.J } }
+    }
+    broadcast evt { Ids = { 1, 2 } }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (interface_deployment
+    spec: (qualified_name
+      (identifier)
+      (identifier))
+    target: (qualified_name
+      (identifier)
+      (identifier))
+    alias: (qualified_name
+      (identifier))
+    (use_declaration
+      (qualified_name
+        (identifier)
+        (identifier)))
+    (property
+      name: (identifier)
+      value: (integer))
+    (property
+      name: (identifier)
+      value: (string))
+    (attribute_deployment
+      target: (qualified_name
+        (identifier))
+      (property
+        name: (identifier)
+        value: (boolean))
+      (type_overwrites
+        (property
+          name: (identifier)
+          value: (integer))))
+    (method_deployment
+      target: (operation_name
+        (qualified_name
+          (identifier))
+        selector: (identifier))
+      (property
+        name: (identifier)
+        value: (integer))
+      (argument_list
+        (argument_deployment
+          target: (qualified_name
+            (identifier))
+          (property
+            name: (identifier)
+            value: (integer))))
+      (argument_list
+        (argument_deployment
+          target: (qualified_name
+            (identifier))
+          (property
+            name: (identifier)
+            value: (interface_reference
+              (qualified_name
+                (identifier)
+                (identifier)))))))
+    (broadcast_deployment
+      target: (operation_name
+        (qualified_name
+          (identifier)))
+      (property
+        name: (identifier)
+        value: (value_array
+          (integer)
+          (integer))))))
+
+================================================================================
+Specification
+================================================================================
+
+specification s.Spec extends s.Base {
+    for interface {
+        Port : Integer (optional);
+        Mode : { A, B } (default: A);
+        Names : String[];
+        Ref : Interface;
+    }
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (specification
+    name: (qualified_name
+      (identifier)
+      (identifier))
+    base: (qualified_name
+      (identifier)
+      (identifier))
+    (specification_host
+      host: (identifier)
+      (property_declaration
+        name: (identifier)
+        type: (property_type
+          (predefined_type))
+        (property_flag))
+      (property_declaration
+        name: (identifier)
+        type: (property_type
+          (enum_type
+            (identifier)
+            (identifier)))
+        (property_flag
+          (qualified_name
+            (identifier))))
+      (property_declaration
+        name: (identifier)
+        type: (property_type
+          (predefined_type)))
+      (property_declaration
+        name: (identifier)
+        type: (property_type
+          (predefined_type))))))
