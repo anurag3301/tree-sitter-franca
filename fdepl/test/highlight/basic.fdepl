@@ -1,0 +1,16 @@
+define s.Spec for interface a.I {
+// <- keyword
+//       ^ type
+//             ^ keyword
+    method foo:sel {
+//  ^ keyword
+//         ^ function.method
+        Id = 0x1F
+//      ^ property
+//           ^ number
+        Flag = true
+//             ^ boolean
+        Name = "x"
+//             ^ string
+    }
+}
