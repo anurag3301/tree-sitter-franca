@@ -1,0 +1,16 @@
+[
+  (type_collection_deployment)
+  (interface_deployment)
+  (extension_root)
+  (extension_element)
+  (specification)
+  (specification_host)
+  (attribute_deployment)
+  (method_deployment)
+  (broadcast_deployment)
+  (struct_deployment)
+  (union_deployment)
+  (enumeration_deployment)
+  (array_deployment)
+  (map_deployment)
+] @fold
