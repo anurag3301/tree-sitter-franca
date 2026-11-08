@@ -3,7 +3,7 @@ package org.demo
 //      ^ module
 
 interface Sensor extends base.Parent {
-// <- keyword.storage
+// <- keyword.type
 //        ^ type
 //                       ^ module
 //                            ^ type
@@ -11,15 +11,15 @@ interface Sensor extends base.Parent {
 //^ keyword
 //                ^ number
   attribute Int32 count readonly
-//^ keyword.storage
-//          ^ constant.builtin
+//^ keyword
+//          ^ type.builtin
 //                ^ property
 //                      ^ keyword.modifier
   method read : byName {
-//^ keyword.storage
+//^ keyword
 //       ^ function.method
     in { String path }
-//       ^ constant.builtin
+//       ^ type.builtin
 //              ^ variable.parameter
     error LoadError
 //  ^ keyword

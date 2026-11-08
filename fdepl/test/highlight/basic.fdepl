@@ -3,7 +3,7 @@ define s.Spec for interface a.I {
 //       ^ type
 //             ^ keyword
     method foo:sel {
-//  ^ keyword.storage
+//  ^ keyword
 //         ^ function.method
         Id = 0x1F
 //      ^ property
