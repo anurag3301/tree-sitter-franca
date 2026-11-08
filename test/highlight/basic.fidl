@@ -1,9 +1,9 @@
 package org.demo
-// <- keyword
+// <- keyword.import
 //      ^ module
 
 interface Sensor extends base.Parent {
-// <- keyword
+// <- keyword.storage
 //        ^ type
 //                       ^ module
 //                            ^ type
@@ -11,15 +11,15 @@ interface Sensor extends base.Parent {
 //^ keyword
 //                ^ number
   attribute Int32 count readonly
-//^ keyword
-//          ^ type.builtin
+//^ keyword.storage
+//          ^ constant.builtin
 //                ^ property
 //                      ^ keyword.modifier
   method read : byName {
-//^ keyword
+//^ keyword.storage
 //       ^ function.method
     in { String path }
-//       ^ type.builtin
+//       ^ constant.builtin
 //              ^ variable.parameter
     error LoadError
 //  ^ keyword
@@ -32,5 +32,3 @@ interface Sensor extends base.Parent {
   const Float ratio = 1.5f
 //                    ^ number.float
 }
-// a plain comment
-// <- comment

@@ -55,8 +55,10 @@
 
 ; Types
 
-(basic_type) @type.builtin
-"Integer" @type.builtin
+; The material theme colours @type and @keyword alike, so builtin types use a
+; capture it renders differently.
+(basic_type) @constant.builtin
+"Integer" @constant.builtin
 ["minInt" "maxInt"] @constant.builtin
 
 ; Literals
@@ -70,32 +72,33 @@
 
 ; Keywords
 
+["package" "import" "from" "model"] @keyword.import
+
 [
-  "package"
-  "import"
-  "from"
-  "model"
   "typeCollection"
   "interface"
+  "struct"
+  "union"
+  "enumeration"
+  "array"
+  "map"
+  "typedef"
+  "attribute"
+  "method"
+  "broadcast"
+  "contract"
+] @keyword.storage
+
+[
   "extends"
   "manages"
   "version"
   "major"
   "minor"
   "const"
-  "attribute"
-  "method"
-  "broadcast"
-  "array"
   "of"
-  "typedef"
   "is"
-  "struct"
-  "union"
-  "enumeration"
-  "map"
   "to"
-  "contract"
   "vars"
   "PSM"
   "initial"
