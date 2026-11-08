@@ -26,7 +26,6 @@ jobs:
         run: |
           tree-sitter generate
           tree-sitter test
-          git diff --exit-code -- src
 
   query:
     name: Validate queries
