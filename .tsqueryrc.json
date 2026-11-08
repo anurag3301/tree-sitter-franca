@@ -1,5 +1,9 @@
 {
   "$schema": "https://raw.githubusercontent.com/ribru17/ts_query_ls/refs/heads/master/schemas/config.json",
+  "language_retrieval_patterns": [
+    "(fdepl)/queries/[^/]+\\.scm$",
+    "tree-sitter-([^/]+)/queries/[^/]+\\.scm$"
+  ],
   "parser_install_directories": ["${HOME}/.local/share/nvim/site/parser"],
   "supported_abi_versions": {
     "start": 13,
