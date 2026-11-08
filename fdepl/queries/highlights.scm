@@ -8,7 +8,7 @@
 (property_declaration name: (identifier) @property)
 (property_type (identifier) @type)
 (enum_type (identifier) @constant)
-(predefined_type) @type.builtin
+(predefined_type) @constant.builtin
 
 ; Deployment headers
 
@@ -56,28 +56,31 @@
 
 ; Keywords
 
+["package" "import"] @keyword.import
+
 [
-  "package"
-  "import"
-  "specification"
-  "extends"
-  "for"
-  "define"
-  "as"
-  "use"
   "typeCollection"
   "interface"
   "attribute"
   "method"
   "broadcast"
-  "in"
-  "out"
   "array"
   "struct"
   "union"
   "typedef"
   "enumeration"
   "map"
+  "specification"
+] @keyword.storage
+
+[
+  "extends"
+  "for"
+  "define"
+  "as"
+  "use"
+  "in"
+  "out"
   "key"
   "value"
   "optional"
